@@ -1,0 +1,19 @@
+*Daily Work Report - 22-March-2024*
+
+Following is a list of tasks I did today,
+
+* Looked into how to use Microsoft's speech software to turn text into speech. This included setting it up, choosing a voice, and making an audio file.
+* Checked what the speech function needs to work and what it gives back, focusing on making speech from text.
+* Looked at how to do something similar with Amazon Polly, another service for making speech from text, including how to get both speech and mouth movement data.
+* Went through Amazon Polly's website to set up and ask for speech to be made from text, picking how it sounds and the format.
+* Read Amazon Polly's help guide to learn how to get both the speech audio and mouth movement info at the same time.
+* Explored AWS Polly integration for text-to-speech functionality in a Next.js project.
+* Encountered error related to AWS SDK version; advised migration from AWS SDK v2 to v3 for future support and modularity.
+* Found "Region is missing" error; verified environment variables and ensured proper loading of AWS region in the SDK configuration.
+* Discovered "CredentialsProviderError: Unable to find environment variable credentials" issue; double-checked environment variable setup and SDK initialization.
+* Faced "ERR_INVALID_ARG_TYPE" when converting Polly's audio stream to a Buffer; adjusted stream handling approach to accommodate Node.js stream types.
+* Searched for Amazon Polly voice IDs to enhance text-to-speech feature with various languages and accents.
+* Resolved stream and data type issues by refining the handling of Polly's response data, ensuring compatibility with Next.js API response structures.
+* Found challenges in including viseme data in responses for enhanced text-to-speech applications; investigated AWS Polly's support for speech marks.
+* Adapted code to efficiently fetch and process viseme data alongside audio synthesis, considering AWS Polly's separate requests for speech marks.
+* Implemented error handling for improved reliability and debugging of the text-to-speech service.
