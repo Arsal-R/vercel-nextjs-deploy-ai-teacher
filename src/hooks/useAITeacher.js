@@ -103,6 +103,7 @@ export const useAITeacher = create((set, get) => ({
                 `/api/tts?teacher=${get().teacher}&text=${message.answer}`
             );
             const audio = await audioRes.blob();
+            console.log(audioRes.headers.get("visemes"))
             const visemes = JSON.parse(await audioRes.headers.get("visemes"));
             const audioUrl = URL.createObjectURL(audio);
             const audioPlayer = new Audio(audioUrl);
