@@ -12,7 +12,7 @@ export async function GET(req) {
 
   // https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts
   const teacher = req.nextUrl.searchParams.get("teacher") || "Nanami";
-  speechConfig.speechSynthesisVoiceName = `en-US-SaraNeural`;
+  speechConfig.speechSynthesisVoiceName = `en-US-AvaNeural`;
 
   const speechSynthesizer = new sdk.SpeechSynthesizer(speechConfig);
   const visemes = [];
