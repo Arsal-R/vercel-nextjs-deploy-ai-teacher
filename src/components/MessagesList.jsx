@@ -7,15 +7,10 @@ export const MessagesList = () => {
   const { currentMessage } = useAITeacher();
 
   const english = useAITeacher((state) => state.english);
-  const furigana = useAITeacher((state) => state.furigana);
+  const cantonese = useAITeacher((state) => state.cantonese);
   const classroom = useAITeacher((state) => state.classroom);
 
   const container = useRef();
-
-  console.log("----------------------------------------------")
-  console.log(currentMessage)
-  console.log(typeof currentMessage)
-  console.log("----------------------------------------------")
 
   useEffect(() => {
     container.current.scrollTo({
@@ -26,11 +21,9 @@ export const MessagesList = () => {
 
   const renderEnglish = (englishText) => (
     <>
-      {english && (
-        <p className="text-4xl inline-block px-2 rounded-sm font-bold bg-clip-text text-transparent bg-gradient-to-br from-blue-300/90 to-white/90">
-          {englishText}
-        </p>
-      )}
+      <p className="text-4xl inline-block px-2 rounded-sm font-bold bg-clip-text text-transparent bg-gradient-to-br from-blue-300/90 to-white/90">
+        {englishText}
+      </p>
     </>
   );
 
@@ -43,18 +36,6 @@ export const MessagesList = () => {
       } p-8 overflow-y-auto flex flex-col space-y-8 bg-transparent opacity-80`}
       ref={container}
     >
-      {messages.length === 0 && (
-        <div className="h-full w-full grid place-content-center text-center">
-          <h2 className="text-8xl font-bold text-white/90 italic">
-            Wawa Sensei
-            <br />
-            Japanese Language School
-          </h2>
-          <h2 className="text-8xl font-bold font-jp text-red-600/90 italic">
-            ワワ先生日本語学校
-          </h2>
-        </div>
-      )}
       {messages.map((message, i) => (
         <div key={i}>
           <div className="flex">
@@ -62,7 +43,7 @@ export const MessagesList = () => {
               <div className="flex items-center gap-3">
                 <span
                   className={`text-white/90 text-2xl font-bold uppercase px-3 py-1 rounded-full  ${
-                    message.speech === "formal"
+                    message.speech === "answer"
                       ? "bg-indigo-600"
                       : "bg-teal-600"
                   }`}
@@ -101,7 +82,7 @@ export const MessagesList = () => {
             ) : (
               <button
                 className="text-white/65"
-                onClick={() => playMessage(message)}
+                onClick={() => playMessage(message, cantonese)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +106,6 @@ export const MessagesList = () => {
               </button>
             )}
           </div>
-          
         </div>
       ))}
     </div>

@@ -9,6 +9,7 @@ const useAudioRecorder = () => {
 
   const [audioBlob, setAudioBlob] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [error, setError] = useState("");
 
   // This array will hold the audio data
   let chunks = [];
@@ -20,32 +21,35 @@ const useAudioRecorder = () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
-
+        
         const mimeType = getMimeType();
-
+        
         const recorder = new MediaRecorder(stream, { mimeType: mimeType });
-
+        
         recorder.onstart = () => {
           chunks = [];
           setHasAudio(false);
           setIsRecording(true);
         };
-
+        
+        
         recorder.ondataavailable = (e) => {
           chunks.push(e.data);
         };
-
+        
         recorder.onstop = async () => {
           const blob = new Blob(chunks, { type: mimeType });
           setAudioBlob(blob);
           setHasAudio(true);
           setIsRecording(false);
         };
-
+        
         setMediaRecorder(recorder);
+
       } catch (error) {
         setIsRecordorAvailable(false);
-        console.error(error);
+        console.log(error);
+        setError(error.toString())
       }
     };
 
@@ -158,6 +162,7 @@ const useAudioRecorder = () => {
     isRecording,
     isTranscribing,
     hasAudio,
+    error,
     startRecording,
     stopRecording,
     playAudio,

@@ -22,10 +22,10 @@ export const useAITeacher = create((set, get) => ({
         }));
     },
     loading: false,
-    furigana: true,
-    setFurigana: (furigana) => {
+    cantonese: false,
+    setCantonese: (cantonese) => {
         set(() => ({
-            furigana,
+            cantonese,
         }));
     },
     english: true,
@@ -34,7 +34,7 @@ export const useAITeacher = create((set, get) => ({
             english,
         }));
     },
-    speech: "formal",
+    speech: "answer",
     setSpeech: (speech) => {
         set(() => ({
             speech,
@@ -55,7 +55,7 @@ export const useAITeacher = create((set, get) => ({
         console.log("Data is ")
         console.log(data)
     },
-    askAI: async (question) => {
+    askAI: async (question, cantonese, prompt) => {
         if (!question) {
             return;
         }
@@ -70,7 +70,7 @@ export const useAITeacher = create((set, get) => ({
         const speech = get().speech;
 
         // Ask AI
-        const res = await fetch(`/api/ai?question=${question}&speech=${speech}`);
+        const res = await fetch(`/api/ai?question=${question}&speech=${speech}&prompt=${prompt}`);
         const data = await res.json();
 
         console.log('Data is :')
@@ -86,9 +86,10 @@ export const useAITeacher = create((set, get) => ({
             messages: [...state.messages, message],
             loading: false,
         }));
-        get().playMessage(message);
+        console.log(message)
+        get().playMessage(message, cantonese);
     },
-    playMessage: async (message) => {
+    playMessage: async (message, cantonese) => {
         set(() => ({
             currentMessage: message,
         }));
@@ -97,13 +98,12 @@ export const useAITeacher = create((set, get) => ({
             set(() => ({
                 loading: true,
             }));
-            // Get TTS
             console.log(message);
-            const audioRes = await fetch(
-                `/api/tts?teacher=${get().teacher}&text=${message.answer}`
-            );
+
+            const audioRes = await fetch(`/api/tts?text=${message.answer}&language=${cantonese ? "cantonese" : "english"}`);
             const audio = await audioRes.blob();
-            console.log(audioRes.headers.get("visemes"))
+            // console.log(audioRes.headers.get("visemes"))
+
             const visemes = JSON.parse(await audioRes.headers.get("visemes"));
             const audioUrl = URL.createObjectURL(audio);
             const audioPlayer = new Audio(audioUrl);

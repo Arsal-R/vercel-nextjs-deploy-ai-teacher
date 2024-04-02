@@ -11,12 +11,13 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Leva, button, useControls } from "leva";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { degToRad } from "three/src/math/MathUtils";
 import { BoardSettings } from "./BoardSettings";
 import { MessagesList } from "./MessagesList";
 import { Teacher } from "./Teacher";
 import { TypingBox } from "./TypingBox";
+import { PromptBox } from "./PromptBox";
 
 const itemPlacement = {
   default: {
@@ -45,10 +46,31 @@ export const Experience = () => {
   const teacher = useAITeacher((state) => state.teacher);
   const classroom = useAITeacher((state) => state.classroom);
 
+  const [prompt, setPrompt] = useState("You are an AI teacher, you should answer every question of student related to studies with pretending like a teacher.");
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedPrompt = localStorage.getItem('userPrompt');
+      if (savedPrompt && savedPrompt !== prompt) {
+        setPrompt(savedPrompt);
+      }
+    }
+  }, []);  
+
+  console.log(`MAIN PROMPT : ${prompt}`)
+
+  const handleUpdatePrompt = (newPrompt) => {
+    setPrompt(newPrompt);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('userPrompt', newPrompt); // Save the new prompt
+    }
+  };  
+
   return (
     <>
       <div className="z-10 md:justify-center fixed bottom-4 left-4 right-4 flex gap-3 flex-wrap justify-stretch">
-        <TypingBox />
+        <PromptBox initialPrompt={prompt} onUpdate={handleUpdatePrompt} />
+        <TypingBox prompt={prompt} />
       </div>
       <Leva hidden />
       <Loader />

@@ -4,7 +4,7 @@ const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"], // This is the default and can be omitted
 });
 
-const formalExample = {
+const answerExample = {
   japanese: [
     { word: "日本", reading: "にほん" },
     { word: "に" },
@@ -107,14 +107,17 @@ const casualExample = {
 };
 
 export async function GET(req) {
-  const speech = req.nextUrl.searchParams.get("speech") || "formal";
-  const speechExample = speech === "formal" ? formalExample : casualExample;
+  const speech = req.nextUrl.searchParams.get("speech") || "answer";
+  const prompt = req.nextUrl.searchParams.get("prompt");
+  const speechExample = speech === "answer" ? answerExample : casualExample;
+
+  console.log(`\nPrompt: ${prompt}\n`)
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
       {
         role: "system",
-        content: `You are an AI teacher, you should answer every question of student related to studies, and act like a teacher.`,
+        content: prompt,
       },
       {
         role: "user",
@@ -124,6 +127,5 @@ export async function GET(req) {
     // model: "gpt-4-turbo-preview", // https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo
     model: "gpt-3.5-turbo"
   });
-  console.log(chatCompletion.choices[0].message.content);
   return Response.json({answer: chatCompletion.choices[0].message.content});
 }

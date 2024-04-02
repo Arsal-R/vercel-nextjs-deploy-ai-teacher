@@ -4,9 +4,12 @@ import { ChatControl } from "./ChatControl";
 import { RecorderControl } from "./RecorderControl";
 import useAudioRecorder from "@/hooks/useAudioRecorder";
 
-export const TypingBox = () => {
+export const TypingBox = ({prompt}) => {
   const askAI = useAITeacher((state) => state.askAI);
   const loading = useAITeacher((state) => state.loading);
+  const cantonese = useAITeacher((state) => state.cantonese);
+  // console.log(cantonese)
+
   const {
     isRecording,
     isTranscribing,
@@ -21,15 +24,17 @@ export const TypingBox = () => {
   const [question, setQuestion] = useState("");
 
   const ask = () => {
-    askAI(question);
+    console.log(`\nPrompt-1: ${prompt}`)
+    askAI(question, cantonese, prompt);
     setQuestion("");
   };
-
+  
   const convertSpeechToText = async () => {
     const data = await speechToText();
     if (data.text) {
       deleteAudio();
-      askAI(data.text);
+      console.log(`\nPrompt-2 (AUDIO): ${prompt}`)
+      askAI(data.text, cantonese, prompt);
     }
   };
 
